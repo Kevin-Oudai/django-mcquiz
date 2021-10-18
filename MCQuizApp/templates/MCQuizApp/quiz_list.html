@@ -1,0 +1,37 @@
+{% extends "base_quiz.html" %} 
+{% block title %} Quizzes {% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col s12 m8 offset-m2">
+      <div class="card-panel">
+      <h1 class="center-align"> Quizzes </h1>
+
+      <table class="highlight">
+        <thead>
+          <tr>
+            <th class="col m8">Title</th>
+            <th class="col m2 center-align">Questions</th>
+            <th class="col m2"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+        {% for quiz in quizzes %}
+          <tr class="hoverable valign-wrapper">
+            <td class="col m8">{{ quiz.title|title }}</td>
+            <td class="col m2 center-align">{{ quiz.number_of_questions }}</td>
+            <td class="col m2 center-align"><a href="{% url 'mcquiz:quiz-detail' quiz.id quiz.url %}" class="waves-effect waves-light btn"><i class="material-icons">send</i></a></td>
+          </tr>
+      {% empty %}
+          <tr>
+            <td>No quizzes yet.</td>
+          </tr>
+      {% endfor %}
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+ 
