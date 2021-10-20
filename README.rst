@@ -9,7 +9,8 @@ Detailed documentation is in the "docs" directory.
 Requirements
 ------------
 
-You require the following packages to use django-mcquiz
+You require the following packages to use django-mcquiz.
+
 1. django-latexify
 2. python-slugify
 
@@ -30,11 +31,11 @@ Quick start
 
     path('quiz/', include('MCQuizApp.urls')),
 
-3. In the HTML header to your template, include:
+3. In the HTML header to your template, include::
 
     {% include "latexify/stylesheets.html" %}
 
-4. In the bottom of your HTML body, include the following to load the JS associated with latexify:
+4. In the bottom of your HTML body, include the following to load the JS associated with latexify::
     
     {% include "latexify/scripts.html" %}
 
