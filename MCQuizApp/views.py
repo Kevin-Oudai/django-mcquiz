@@ -49,22 +49,17 @@ def solutions(request, pk, quiz_url):
     guesses = request.GET.dict()
 
     # retrieve questions ids and correct answers
-    questions = Question.objects.filter(quiz=pk)
-    question_ids = [str(x.id) for x in questions]
-    question_content = [x.content for x in questions]
-    question_choices = [x.get_answers_list() for x in questions]
-    correct_answers = [x.get_answer_id() for x in questions]
-    answers = dict(zip(question_ids, correct_answers))
+    questions = Quiz.objects.get(id=pk).get_questions()
 
     # create solutions list
     question = []
-    for i in range(len(questions)):
-        if question_ids[i] in guesses.keys():
-            guess = guesses[question_ids[i]]
+    for item in questions:
+        if item.id in guesses.keys():
+            guess = guesses[item.id]
         else:
             guess = None
-        question.append({'content': str(question_content[i]), 'guess': guess,
-                         'answer': str(correct_answers[i]), 'choices': question_choices[i]})
+        question.append({'content': str(item.content), 'guess': guess,
+                         'answer': str(item.get_answer_id()), 'choices': item.get_answers_list()})
     # count total correct and total incorrect
     total_correct = 0
     total_incorrect = 0
