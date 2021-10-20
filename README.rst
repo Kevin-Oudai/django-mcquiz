@@ -4,7 +4,6 @@ Multiple Choice Quiz
 
 MCQuiz is a Django app to display multiple choice quizzes and grade the quiz when it is submitted. It does not save any user data. It is strictly to create, display and grade.
 
-Detailed documentation is in the "docs" directory.
 
 Requirements
 ------------
