@@ -188,6 +188,11 @@ class SolutionsTests(TestCase):
         url = "/quiz/1/test-title-1/solutions?1=1"
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+        total_html = "<th>Total Correct</th>\n                <td class=\'right-align\'>1 </td>"
+        self.assertContains(
+            response, total_html)
+
+        #
 
     def test_answer_is_incorrect(self):
         """

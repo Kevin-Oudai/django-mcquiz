@@ -47,15 +47,14 @@ def questions_view(request, pk, quiz_url):
 def solutions(request, pk, quiz_url):
     # retrive guesses
     guesses = request.GET.dict()
-
     # retrieve questions ids and correct answers
     questions = Quiz.objects.get(id=pk).get_questions()
 
     # create solutions list
     question = []
     for item in questions:
-        if item.id in guesses.keys():
-            guess = guesses[item.id]
+        if str(item.id) in guesses.keys():
+            guess = guesses[str(item.id)]
         else:
             guess = None
         question.append({'content': str(item.content), 'guess': guess,
