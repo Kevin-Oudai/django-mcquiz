@@ -59,7 +59,7 @@ class Question(models.Model):
     quiz = models.ManyToManyField(Quiz, verbose_name="Quiz", blank=True)
     # figure = models.ImageField(
     #     upload_to='uploads/', blank=True, null=True, verbose_name="Figure")
-    content = models.CharField(max_length=1000, blank=False,
+    content = models.TextField(max_length=1000, blank=False,
                                help_text="Enter the question text.", verbose_name='Question')
     reason = models.TextField(
         max_length=2000, blank=True, help_text="Explanation for when question is answered.", verbose_name="Explanation")

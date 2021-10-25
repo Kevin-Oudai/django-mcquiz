@@ -50,6 +50,18 @@
                         <span class="black-text">{% latexify choice.1 parse_math=True %}</span>
                     </label>
                     </p>
+                {% elif question.guess == None and choice.0 == question.answer %}
+                    <p class="green lighten-5">
+                    <label style="font-size:15px;">
+                        <span>{% latexify choice.1 parse_math=True %}</span>
+                    </label>
+                    </p>
+                {% elif question.guess == None and choice.0 != question.answer %}
+                    <p class="red lighten-5">
+                    <label style="font-size:15px;">
+                        <span>{% latexify choice.1 parse_math=True %}</span>
+                    </label>
+                    </p>
                 {% elif choice.0 == question.guess %}
                     <p class="red lighten-5">
                     <label style="font-size:15px;">
