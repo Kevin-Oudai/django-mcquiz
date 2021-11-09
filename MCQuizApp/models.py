@@ -57,8 +57,8 @@ class Question(models.Model):
     hasAnswer - This is set to true if the question has an answer.
     """
     quiz = models.ManyToManyField(Quiz, verbose_name="Quiz", blank=True)
-    # figure = models.ImageField(
-    #     upload_to='uploads/', blank=True, null=True, verbose_name="Figure")
+    figure = models.FileField(
+        upload_to='quiz_images/', default=None, blank=True, null=True, verbose_name="Figure")
     content = models.TextField(max_length=1000, blank=False,
                                help_text="Enter the question text.", verbose_name='Question')
     reason = models.TextField(

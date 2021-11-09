@@ -34,9 +34,12 @@ def questions_view(request, pk, quiz_url):
     context['title'] = quiz.title
     if questions != None:
         for i in range(len(questions)):
-            data.append(
-                {"id": questions[i].pk, "content": questions[i].content, "answers": questions[i].get_answers_list()})
-
+            data.append({
+                "id": questions[i].pk,
+                "figure": questions[i].figure,
+                "content": questions[i].content,
+                "answers": questions[i].get_answers_list()
+            })
     context['questions'] = data
     context['pk'] = pk
     context['url'] = quiz_url
@@ -57,7 +60,7 @@ def solutions(request, pk, quiz_url):
             guess = guesses[str(item.id)]
         else:
             guess = None
-        question.append({'content': str(item.content), 'guess': guess,
+        question.append({'figure': item.figure, 'content': str(item.content), 'guess': guess,
                          'answer': str(item.get_answer_id()), 'choices': item.get_answers_list()})
     # count total correct and total incorrect
     total_correct = 0

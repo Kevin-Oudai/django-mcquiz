@@ -4,6 +4,14 @@ Multiple Choice Quiz
 
 MCQuiz is a Django app to display multiple choice quizzes and grade the quiz when it is submitted. It does not save any user data. It is strictly to create, display and grade.
 
+Features
+--------
+
+1. Create Quiz (in admin view)
+2. Display Quiz List (user view)
+3. Display Quiz Detail (user view)
+4. Display Quiz with Images (user view - recommend using svg files)
+5. Display Solutions and Score.
 
 Requirements
 ------------
@@ -13,7 +21,7 @@ You require the following packages to use django-mcquiz.
 1. django-latexify
 2. python-slugify
 
-The should be installed when you install django-mcquiz.
+They should be installed when you install django-mcquiz. You should also have you MEDIA_ROOT and MEDIA_URL configured. 
 
 Quick start
 -----------
