@@ -1,4 +1,3 @@
-from django.conf.urls import url
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.core.validators import MaxValueValidator
@@ -6,15 +5,60 @@ from slugify import slugify as makeSlug
 
 
 class Quiz(models.Model):
-    title = models.CharField(verbose_name='Title', max_length=60, blank=False)
-    description = models.TextField(verbose_name="Description", blank=True)
-    url = models.SlugField(max_length=60, blank=True)
+    """Represents a collection of :class:`Question` objects.
+
+    Fields
+    ------
+    title: :class:`~django.db.models.CharField`
+        Human readable name for the quiz.
+    description: :class:`~django.db.models.TextField`
+        Optional description shown on the quiz detail page.
+    url: :class:`~django.db.models.SlugField`
+        Slug generated from ``title`` used in URLs.
+    number_of_questions: :class:`~django.db.models.PositiveSmallIntegerField`
+        Automatically populated count of associated questions.
+    pass_mark: :class:`~django.db.models.PositiveSmallIntegerField`
+        Percentage score required to pass the quiz. Must be <= 100.
+    draft: :class:`~django.db.models.BooleanField`
+        When ``True`` the quiz is hidden from public listings.
+    """
+
+    title = models.CharField(
+        verbose_name="Title",
+        max_length=60,
+        help_text="Name of the quiz displayed to users.",
+    )
+    description = models.TextField(
+        verbose_name="Description",
+        blank=True,
+        help_text="Optional description of the quiz.",
+    )
+    url = models.SlugField(
+        max_length=60,
+        blank=True,
+        verbose_name="URL",
+        help_text="Auto-generated slug for building quiz URLs.",
+    )
     number_of_questions = models.PositiveSmallIntegerField(
-        blank=True, default=0, null=True, verbose_name="# of Questions")
+        blank=True,
+        default=0,
+        null=True,
+        verbose_name="# of Questions",
+        help_text="Calculated number of questions in the quiz.",
+    )
     pass_mark = models.PositiveSmallIntegerField(
-        blank=True, default=0, verbose_name="Pass Mark", validators=[MaxValueValidator(100)])
+        blank=True,
+        default=0,
+        verbose_name="Pass Mark",
+        validators=[MaxValueValidator(100)],
+        help_text="Required percentage score to pass (0-100).",
+    )
     draft = models.BooleanField(
-        blank=True, default=False, verbose_name="Draft")
+        blank=True,
+        default=False,
+        verbose_name="Draft",
+        help_text="Designates whether this quiz is unpublished.",
+    )
 
     class Meta:
         verbose_name = "Quiz"
@@ -47,23 +91,53 @@ class Quiz(models.Model):
 
 
 class Question(models.Model):
+    """A single question that belongs to one or more quizzes.
+
+    Fields
+    ------
+    quiz: :class:`~django.db.models.ManyToManyField`
+        Relationship to the quizzes that include this question.
+    figure: :class:`~django.db.models.FileField`
+        Optional image associated with the question.
+    content: :class:`~django.db.models.TextField`
+        The question text.
+    reason: :class:`~django.db.models.TextField`
+        Explanation displayed when showing solutions.
+    hasAnswer: :class:`~django.db.models.BooleanField`
+        Indicates whether the question currently has a correct answer.
     """
-    Attribute definition for the Question model
-    quiz    -   Relates the quizzes and questions with a many to many field since a question can repeat in many quizzes
-                and many quizzes can have the same question
-    figure  -   If the question has a figure we use this attribute it may be blank (will add to future version).
-    content -   This holds the text content for the question.
-    reason  -   This holds the reason for the answer. It should be displayed after the question is answered.
-    hasAnswer - This is set to true if the question has an answer.
-    """
-    quiz = models.ManyToManyField(Quiz, verbose_name="Quiz", blank=True)
+
+    quiz = models.ManyToManyField(
+        Quiz,
+        verbose_name="Quiz",
+        blank=True,
+        help_text="Quizzes that include this question.",
+    )
     figure = models.FileField(
-        upload_to='quiz_images/', default=None, blank=True, null=True, verbose_name="Figure")
-    content = models.TextField(max_length=1000, blank=False,
-                               help_text="Enter the question text.", verbose_name='Question')
+        upload_to="quiz_images/",
+        default=None,
+        blank=True,
+        null=True,
+        verbose_name="Figure",
+        help_text="Optional image displayed with the question.",
+    )
+    content = models.TextField(
+        max_length=1000,
+        blank=False,
+        help_text="Enter the question text.",
+        verbose_name="Question",
+    )
     reason = models.TextField(
-        max_length=2000, blank=True, help_text="Explanation for when question is answered.", verbose_name="Explanation")
-    hasAnswer = models.BooleanField(default=False, verbose_name="Has Answer")
+        max_length=2000,
+        blank=True,
+        help_text="Explanation displayed when the question is answered.",
+        verbose_name="Explanation",
+    )
+    hasAnswer = models.BooleanField(
+        default=False,
+        verbose_name="Has Answer",
+        help_text="True if a correct answer exists for this question.",
+    )
 
     def save(self, *args, **kwargs):
         return super().save(*args, **kwargs)
@@ -97,17 +171,35 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
+    """Possible answer for a :class:`Question`.
+
+    Fields
+    ------
+    question: :class:`~django.db.models.ForeignKey`
+        The question this answer relates to.
+    content: :class:`~django.db.models.CharField`
+        Text displayed for the answer.
+    correct: :class:`~django.db.models.BooleanField`
+        Indicates if this answer is the correct one.
     """
-    question    -   Relates multiple answers to one question.
-    content     -   Contains the content for the answer
-    correct     -   If this is the correct answer for a related question it should hold True and False otherwise.
-    """
+
     question = models.ForeignKey(
-        Question, verbose_name="Question", on_delete=models.CASCADE)
-    content = models.CharField(max_length=1000, blank=False,
-                               help_text="This contains the answer", verbose_name="Content")
+        Question,
+        verbose_name="Question",
+        on_delete=models.CASCADE,
+        help_text="Question that this answer belongs to.",
+    )
+    content = models.CharField(
+        max_length=1000,
+        blank=False,
+        help_text="Text for the answer option.",
+        verbose_name="Content",
+    )
     correct = models.BooleanField(
-        blank=False, default=False, help_text="Set to this if the answer is correct")
+        blank=False,
+        default=False,
+        help_text="Set to True if this answer is correct.",
+    )
 
     class Meta:
         verbose_name = 'Answer'

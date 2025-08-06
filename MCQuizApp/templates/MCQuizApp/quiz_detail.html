@@ -1,29 +1,19 @@
 {% extends "base_quiz.html" %}
 
 {% block title %} {{ object.title|title }} {% endblock %}
-{% block content %}
-<div class="row">
-  <div class="col s12 m8 offset-m2">
+{% block body %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
     <div class="card">
-      <div class="card-content">
-        <span class="card-title center-align">{{ object.title|title }}</span>
-        <div class="divider"></div>
-          <div class="section">
-            <p>{{ object.description }}</p>
-          </div>
-        <div class="divider"></div>
-        <div class="section">
-          <div class="row">
-            <div class="col s12 center-align">
-              <p><strong>Number of Questions:</strong><span>{{ object.number_of_questions }}</span></p>
-              <p><strong><em>Pass Mark:</em></strong> <span>{{ object.pass_mark }}</span></p>
-            </div>
-          </div>
+      <div class="card-body">
+        <h2 class="card-title text-center">{{ object.title|title }}</h2>
+        <p>{{ object.description }}</p>
+        <hr />
+        <p class="text-center"><strong>Number of Questions:</strong> {{ object.number_of_questions }}</p>
+        <p class="text-center"><strong>Pass Mark:</strong> {{ object.pass_mark }}</p>
+        <div class="text-center">
+          <a class="btn btn-success" href="{% url 'mcquiz:question-list' object.id object.url %}">Start Quiz</a>
         </div>
-      <div class="card-action center-align hoverable">
-        <a type="button" href="{% url 'mcquiz:question-list' object.id object.url %}">
-          Start Quiz
-        </a>
       </div>
     </div>
   </div>

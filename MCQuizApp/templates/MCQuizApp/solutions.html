@@ -1,30 +1,29 @@
 {% extends 'base_quiz.html' %}
 {% load latexify %}
 
-{% block content %}
+{% block body %}
 
-<div class="row">
-  <div class="col s12 m6 offset-m3">
-    <div class="card">
-      <div class="card-content">
-        <span class="card-title center-align">Summary</span>
-        <table>
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title text-center">Summary</h5>
+        <table class="table">
           <tr>
             <th>Total Questions</th>
-            <td class='right-align'> {{ number }} </td>
+            <td class="text-end">{{ number }}</td>
           </tr>
           <tr>
             <th>Total Correct</th>
-            <td class='right-align'>{{ total }} </td>
+            <td class="text-end">{{ total }}</td>
           </tr>
           <tr>
             <th>Total Incorrect</th>
-            <td class='right-align'>{{ errors }}
-            <td>
+            <td class="text-end">{{ errors }}</td>
           </tr>
           <tr>
-            <th> % Correct </th>
-            <td class='right-align'> {{ score|floatformat:"1" }} % </td>
+            <th>% Correct</th>
+            <td class="text-end">{{ score|floatformat:"1" }} %</td>
           </tr>
         </table>
       </div>
@@ -32,80 +31,40 @@
   </div>
 </div>
 
-<h1 class="center-align"> Solutions </h1>
+<h1 class="text-center">Solutions</h1>
 {% for question in questions %}
-<div class="row">
-  <div class="col s12 m8 offset-m2">
-    <div class="card hoverable">
-      <div class="card-content">
-        <span class="card-title center-align">Question #{{ forloop.counter }}</span>
+<div class="row justify-content-center mb-4">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-center">Question #{{ forloop.counter }}</h5>
         {% if question.figure %}
-        <div class="row">
-          <div class="col s10 m8 offset-m2">
-            <img src="{{question.figure.url}}" alt="Figure for question {{ forloop.counter }}" height="250" width="80%">
-          </div>
+        <div class="text-center mb-3">
+          <img src="{{question.figure.url}}" alt="Figure for question {{ forloop.counter }}" class="img-fluid">
         </div>
         {% endif %}
-        <p style="font-size:15px;">{% latexify question.content parse_math=True %}</p>
-      </div>
-      <div class="row">
-        <div class="col s10 m10 offset-s1 offset-m1">
-          {% for choice in question.choices %}
-          {% comment %} If conditions {% endcomment %}
-          {% if choice.0 == question.guess and question.guess == question.answer %}
-          <p class="green lighten-5">
-            <label style="font-size:15px;">
-              <span class="black-text">{% latexify choice.1 parse_math=True %}</span>
-            </label>
-          </p>
-          {% elif question.guess == None and choice.0 == question.answer %}
-          <p class="green lighten-5">
-            <label style="font-size:15px;">
-              <span>{% latexify choice.1 parse_math=True %}</span>
-            </label>
-          </p>
-          {% elif question.guess == None and choice.0 != question.answer %}
-          <p class="red lighten-5">
-            <label style="font-size:15px;">
-              <span>{% latexify choice.1 parse_math=True %}</span>
-            </label>
-          </p>
-          {% elif choice.0 == question.guess %}
-          <p class="red lighten-5">
-            <label style="font-size:15px;">
-              <span>{% latexify choice.1 parse_math=True %}</span>
-            </label>
-          </p>
-          {% elif choice.0 == question.answer %}
-          <p class="green lighten-5">
-            <label style="font-size:15px;">
-              <span>{% latexify choice.1 parse_math=True %}</span>
-            </label>
-          </p>
-          {% else %}
-          <p>
-            <label style="font-size:15px;">
-              <span class="black-text">{% latexify choice.1 parse_math=True %}</span>
-            </label>
-          </p>
-          {% endif %}
-          {% comment %} end if conditions {% endcomment %}
-          {% endfor %}
-        </div>
+        <p>{% latexify question.content parse_math=True %}</p>
+        {% for choice in question.choices %}
+        {% if choice.0 == question.guess and question.guess == question.answer %}
+        <p class="bg-success p-2 text-white">{% latexify choice.1 parse_math=True %}</p>
+        {% elif question.guess == None and choice.0 == question.answer %}
+        <p class="bg-success p-2 text-white">{% latexify choice.1 parse_math=True %}</p>
+        {% elif question.guess == None and choice.0 != question.answer %}
+        <p class="bg-danger p-2 text-white">{% latexify choice.1 parse_math=True %}</p>
+        {% elif choice.0 == question.guess %}
+        <p class="bg-danger p-2 text-white">{% latexify choice.1 parse_math=True %}</p>
+        {% elif choice.0 == question.answer %}
+        <p class="bg-success p-2 text-white">{% latexify choice.1 parse_math=True %}</p>
+        {% else %}
+        <p>{% latexify choice.1 parse_math=True %}</p>
+        {% endif %}
+        {% endfor %}
       </div>
     </div>
   </div>
 </div>
 {% empty %}
-<div class="row">
-  <div class="col s12 m8 offset-m2">
-    <div class="card">
-      <div class="card-content">
-        <span class="card-title center-align">No Questions Here...</span>
-      </div>
-    </div>
-  </div>
-</div>
+<p class="text-center">No Questions Here...</p>
 {% endfor %}
 
-{% endblock content %}
+{% endblock %}
