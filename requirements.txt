@@ -1,0 +1,5 @@
+Django>=3.2
+django-latexify>=0.3
+python-slugify>=5.0.2
+Pillow>=8.4.0
+coverage

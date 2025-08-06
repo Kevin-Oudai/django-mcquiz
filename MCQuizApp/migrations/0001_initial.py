@@ -33,6 +33,7 @@ class Migration(migrations.Migration):
             name='Question',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('figure', models.FileField(blank=True, default=None, null=True, upload_to='quiz_images/', verbose_name='Figure')),
                 ('content', models.TextField(help_text='Enter the question text.', max_length=1000, verbose_name='Question')),
                 ('reason', models.TextField(blank=True, help_text='Explanation for when question is answered.', max_length=2000, verbose_name='Explanation')),
                 ('hasAnswer', models.BooleanField(default=False, verbose_name='Has Answer')),

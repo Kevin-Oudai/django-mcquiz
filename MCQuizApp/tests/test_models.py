@@ -106,7 +106,12 @@ class QuizModelTests(TestCase):
         """
         questions = self.q3.get_questions()
         expected = [self.p3]
-        self.assertQuerysetEqual(questions, expected)
+        self.assertQuerySetEqual(questions, expected)
+
+    def test_quiz_creation(self):
+        """A quiz can be created with the required fields."""
+        quiz = Quiz.objects.create(title="Sample", description="Desc")
+        self.assertEqual(str(quiz), "Sample")
 
 
 class QuestionModelTests(TestCase):

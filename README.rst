@@ -2,7 +2,11 @@
 Multiple Choice Quiz
 ====================
 
-MCQuiz is a Django app to display multiple choice quizzes and grade the quiz when it is submitted. It does not save any user data. It is strictly to create, display and grade.
+MCQuiz is a reusable Django application for building and running multiple
+choice quizzes. The app provides models for quizzes, questions and answers,
+views to take a quiz and review solutions, and Bootstrap-based templates for a
+simple UI. MCQuiz does not store user information; it simply displays quizzes,
+accepts answers and calculates scores.
 
 Features
 --------
@@ -52,3 +56,43 @@ Quick start
    to create a quiz and questions (you'll need the Admin app enabled).
 
 7. Visit http://127.0.0.1:8000/quiz/ to view the available quizzes.
+
+Setup
+-----
+
+1. Install dependencies::
+
+       pip install -r requirements.txt
+
+2. Apply migrations::
+
+       python manage.py migrate
+
+3. Run the development server::
+
+       python manage.py runserver
+
+Usage
+-----
+
+* Log into the Django admin at ``/admin`` to create ``Quiz`` and ``Question``
+  objects.
+* Each question can have multiple answers with one marked as correct.
+* Visit ``/quiz/`` to list quizzes and start answering questions.
+
+Testing
+-------
+
+Run the test suite with coverage::
+
+    coverage run manage.py test
+    coverage report
+
+License
+-------
+
+This project is licensed under the MIT License. You are free to use, copy,
+modify, merge, publish, distribute, sublicense, and/or sell copies of the
+software provided that the copyright notice and permission notice are included
+in all copies or substantial portions of the software. See ``LICENSE`` for the
+full text.

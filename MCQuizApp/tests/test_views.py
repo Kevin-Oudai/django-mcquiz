@@ -37,7 +37,17 @@ class QuizListViewTests(TestCase):
         response = self.client.get(reverse('mcquiz:index'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No quizzes yet.")
-        self.assertQuerysetEqual(response.context['quizzes'], [])
+        self.assertQuerySetEqual(response.context['quizzes'], [])
+
+    def test_quiz_list_view_displays_quiz(self):
+        """The quiz list view loads and lists available quizzes."""
+        quiz = create_quiz(1, "Title", "Desc")
+        question = create_question(1, "Question", True)
+        question.quiz.add(quiz)
+        create_answer(1, question, "Ans", True)
+        response = self.client.get(reverse('mcquiz:index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Title")
 
     def test_draft_quiz(self):
         """
@@ -47,7 +57,7 @@ class QuizListViewTests(TestCase):
         response = self.client.get(reverse('mcquiz:index'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "No quizzes yet.")
-        self.assertQuerysetEqual(response.context['quizzes'], [])
+        self.assertQuerySetEqual(response.context['quizzes'], [])
 
     def test_quiz_with_no_questions(self):
         """
@@ -58,7 +68,7 @@ class QuizListViewTests(TestCase):
         response = self.client.get(reverse('mcquiz:index'))
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, "Test Title 1")
-        self.assertQuerysetEqual(response.context['quizzes'], [])
+        self.assertQuerySetEqual(response.context['quizzes'], [])
 
 
 class QuizDetailViewTests(TestCase):
@@ -188,9 +198,8 @@ class SolutionsTests(TestCase):
         url = "/quiz/1/test-title-1/solutions?1=1"
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        total_html = "<th>Total Correct</th>\n                <td class=\'right-align\'>1 </td>"
-        self.assertContains(
-            response, total_html)
+        self.assertContains(response, "Total Correct")
+        self.assertContains(response, '<td class="text-end">1</td>')
 
         #
 
